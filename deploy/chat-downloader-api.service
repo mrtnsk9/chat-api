@@ -1,0 +1,22 @@
+[Unit]
+Description=Chat Downloader API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=chat-api
+Group=chat-api
+WorkingDirectory=/opt/chat-downloader-api
+EnvironmentFile=/etc/chat-downloader-api.env
+ExecStart=/opt/chat-downloader-api/.venv/bin/uvicorn main:app --host 127.0.0.1 --port 8000
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/lib/chat-downloader-api/chats
+
+[Install]
+WantedBy=multi-user.target

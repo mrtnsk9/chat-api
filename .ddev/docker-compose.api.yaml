@@ -1,0 +1,30 @@
+services:
+  api:
+    container_name: "ddev-${DDEV_SITENAME}-api"
+    image: "python:3.14-slim-${DDEV_SITENAME}-api-built"
+    build:
+      context: ..
+      dockerfile: .ddev/Dockerfile.api
+    labels:
+      com.ddev.site-name: ${DDEV_SITENAME}
+      com.ddev.approot: ${DDEV_APPROOT}
+    restart: "no"
+    working_dir: /app
+    command:
+      - uvicorn
+      - main:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+      - --reload
+    volumes:
+      - "../:/app"
+    expose:
+      - "8000"
+    environment:
+      CHAT_API_TOKEN: local-ddev-token
+      CHAT_OUTPUT_DIR: /tmp/chat-api-downloads
+      VIRTUAL_HOST: ${DDEV_HOSTNAME}
+      HTTP_EXPOSE: "8000:8000"
+      HTTPS_EXPOSE: "8001:8000"
